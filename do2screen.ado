@@ -10,6 +10,7 @@ Modified: 	29Dec2015	(Santiago Garriga & Andres Castaneda)
 Modified: 	26Apr2016	(Andres Castaneda) 
 Modified: 	15aug2017	(Andres Castaneda) 
 Modified: 	23sep2017	(Andres Castaneda) 
+Modified: 	03mar2021	(Felipe Balcazar) 
 version:		02.3 
 Dependencies: 	THE WORLD BANK
 *===========================================================================*/
@@ -125,15 +126,20 @@ qui {
 	
 	foreach dofile of local dofiles {
 		
-		noi dis as text _new "{p 4 4 2}{cmd:do-file:} "	in y  "  `dofile'" 	 ///
-		`"{browse "`folder'`dofile'":{space 10}Open }"'" {p_end}" 
-		noi dis as text "{hline 96}" 
-		
-		cap noi do2screen_display, variables(`variables')     ///
+		cap qui do2screen_display, variables(`variables')     ///
 		find(`"`find'"') dofile(`dofile') range(`range')    ///
 		lines(`lines') start(`start') end(`end') `previous' ///
 		`labels' `varout' `lrep' `rrep' `dblq' `scalarname' ///
 		`comments' `linenumbers'
+		
+		if "`r(lineN)'"!="" {
+			noi noi dis as text _new "{p 4 4 2}{cmd:do-file:} "	in y  "  `dofile'" 	 ///
+			`"{browse "`folder'`dofile'":{space 10}Open }"'" {p_end}" 
+			noi noi dis as text "{hline 96}" 
+			
+			noi noi disp in g `"`r(lineN)'"' in y `"`r(lcodeC)'"'
+		}
+		
 	}
 	
 	/*================================================================
@@ -599,6 +605,9 @@ qui {
 		noi di as text  _column(45)  "{hline 10}" " (end of analysis of lines between `start' & `end')" _newline
 	} // end of range condition
 	
+	cap return local lineN = "`linenumber'"
+	cap return local lcodeC = " `lcode'"
+	
 }
 end
 
@@ -669,19 +678,3 @@ exit
 *! Version 2.0    <29Dec2015>
 *! Version 1.1    <05Mar2015>
 *! Version 0.0    <06Feb2015>   
-
-
-*---------- NOTES--------------------
-dom_2004_enft_v01_m_v03_a_sedlac_02
-bol_2006_eh_v01_m_v02_a_sedlac_02
-
-local using dom_2004_enft_v01_m_v03_a_sedlac_02.do
-do2screen using `using', var(ila)
-
-
-do2screen using test.do, var(edlev)
-do2screen using test.do, var(secondary)
-
-
-do2screen using test2.do, var(ho7)
-do2screen using test2.do, var(ho7a)
