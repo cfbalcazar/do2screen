@@ -76,7 +76,7 @@ qui {
 	* ============2. Set Default Options============================= 
 	* ===============================================================
 	
-	* Folder
+	* Folderx
 	if (`"`folder'"' != `""') {
 		if regexm(`"`folder'"', `"[\]$"') ///
 		local folder = reverse(substr(reverse(`"`folder'"'), 2, .))
@@ -131,8 +131,8 @@ qui {
 		lines(`lines') start(`start') end(`end') `previous' ///
 		`labels' `varout' `lrep' `rrep' `dblq' `scalarname' ///
 		`comments' `linenumbers'
-		
-		if "`r(lineN)'"!="" {
+	
+		if "`r(lllineN)'"!="yes"  {
 			noi noi dis as text _new "{p 4 4 2}{cmd:do-file:} "	in y  "  `dofile'" 	 ///
 			`"{browse "`folder'`dofile'":{space 10}Open }"'" {p_end}" 
 			noi noi dis as text "{hline 96}" 
@@ -576,6 +576,7 @@ qui {
 			}  // end of of condition when something found. 
 			else {
 				noi disp in red "nothing found for " in y " `tofind'"
+				local notfound = "yes"
 			}
 			noi di as text  _column(60)  "{hline 10}" " (end of analysis of `tofind')" _newline
 		} // End of tofind loop		
@@ -605,6 +606,7 @@ qui {
 		noi di as text  _column(45)  "{hline 10}" " (end of analysis of lines between `start' & `end')" _newline
 	} // end of range condition
 	
+	cap return local lllineN = "`notfound'"
 	cap return local lineN = "`linenumber'"
 	cap return local lcodeC = " `lcode'"
 	
